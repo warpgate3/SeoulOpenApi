@@ -1,0 +1,4 @@
+api:
+  credential_key: "4445474e677761723130374964455271"
+  api_server_url: "http://openapi.seoul.go.kr:8088/"
+  service_name: "/GetParkInfo"
