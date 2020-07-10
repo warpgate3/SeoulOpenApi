@@ -1,4 +1,4 @@
-package info.m2sj.bo.exceptions;
+package info.m2sj.bo.core.exceptions;
 
 public class BaseException extends RuntimeException {
     public BaseException(String msg) {
