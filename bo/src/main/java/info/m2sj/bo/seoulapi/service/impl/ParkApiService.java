@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import static info.m2sj.bo.seoulapi.constants.ApiServiceType.GetParkInfo;
 
-
+/**
+ * 공용 주차장 조회 API 처리 서비스
+ */
 @Service
 @Slf4j
 public class ParkApiService extends CommonApiService implements ApiService {

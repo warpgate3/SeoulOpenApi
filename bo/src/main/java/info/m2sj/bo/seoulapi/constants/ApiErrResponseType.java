@@ -1,9 +1,9 @@
 package info.m2sj.bo.seoulapi.constants;
 
+/**
+ * 공공 API 오류 응답 코드
+ */
 public enum ApiErrResponseType {
-//    INFO_000("INFO-000","정상 처리되었습니다."),
-//    INFO_100("INFO-100","인증키가 유효하지 않습니다."),
-//    INFO_200("INFO-200","해당하는 데이터가 없습니다"),
     ERROR_300("ERROR-300","필수 값이 누락되어 있습니다."),
     ERROR_301("ERROR-301","파일타입 값이 누락 혹은 유효하지 않습니다. 요청인자 중 TYPE을 확인하십시오."),
     ERROR_310("ERROR-310","해당하는 서비스를 찾을 수 없습니다. 요청인자 중 SERVICE를 확인하십시오"),
@@ -18,6 +18,7 @@ public enum ApiErrResponseType {
     ERROR_601("ERROR0-601","SQL 문장 오류 입니다. 지속적으로 발생시 열린 데이터 광장으로 문의(Q&A) 바랍니다");
 
     private String responseCode;
+
     private String responseMessage;
 
     ApiErrResponseType(String responseCode, String responseMessage) {
@@ -25,6 +26,11 @@ public enum ApiErrResponseType {
         this.responseMessage = responseMessage;
     }
 
+    /**
+     * 입력 받는 에러코드 Enum 반환
+     * @param errCode 에러코드
+     * @return ApiErrResponseType
+     */
     public static ApiErrResponseType getError(String errCode) {
         ApiErrResponseType[] values = ApiErrResponseType.values();
         for (ApiErrResponseType value : values) {
@@ -38,6 +44,7 @@ public enum ApiErrResponseType {
     public String getResponseCode() {
        return this.responseCode;
     }
+
     public String getResponseMessage() {
        return this.responseMessage;
     }

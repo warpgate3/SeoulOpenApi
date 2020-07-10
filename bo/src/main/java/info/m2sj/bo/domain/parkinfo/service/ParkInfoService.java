@@ -1,18 +1,24 @@
-package info.m2sj.bo.domain.service;
+package info.m2sj.bo.domain.parkinfo.service;
 
 import info.m2sj.bo.core.ParkInfoDataLoader;
-import info.m2sj.bo.domain.dto.SearchParam;
+import info.m2sj.bo.domain.parkinfo.dto.SearchParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.Range;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.time.DayOfWeek.SATURDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -48,7 +54,58 @@ public class ParkInfoService {
 
         List<Map<String, String>> collect = mapStream.collect(Collectors.toList());
         List<Integer> fromToPageNumber = getFromToPageNumber(collect, searchParam.getPageNumber(), searchParam.getPageScale());
-        return Flux.just(collect.subList(fromToPageNumber.get(0), fromToPageNumber.get(1)));
+
+        List<Map<String, String>> pageList = collect.subList(fromToPageNumber.get(0), fromToPageNumber.get(1));
+
+        //주차 가능 여부 정보 저장
+        pageList.forEach(m -> m.put("AVAILABLE_PARKING", isAvailableParking(m) ? "Y" : "N"));
+        return Flux.just(pageList);
+    }
+
+    /**
+     * 주차 가능 여부 확인
+     * <p>
+     * CAPACITY 확인
+     * 오늘 날짜 확인 (평일, 주말, 공휴일)
+     * 시간 확인
+     *
+     * @return
+     */
+    private boolean isAvailableParking(Map<String, String> parkingLot) {
+        String capacity = parkingLot.get("CAPACITY");
+        if (StringUtils.isEmpty(capacity) || Objects.equals(capacity, "0")) {
+            return false;
+        }
+        LocalDate day = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        int now = timeToNumber();
+        //TODO :공휴일 체크 제외
+        if (isWeekEnd(day)) {
+            return contains(now, timeToNumber(parkingLot.get("WEEKEND_BEGIN_TIME")),
+                    timeToNumber(parkingLot.get("WEEKEND_END_TIME")));
+        }
+        return contains(now, timeToNumber(parkingLot.get("WEEKDAY_BEGIN_TIME")),
+                timeToNumber(parkingLot.get("WEEKDAY_END_TIME")));
+    }
+
+    private boolean contains(int target, int from, int to) {
+        log.debug("{} < {} < {} ",from ,target, to);
+        Range<Integer> range = Range.between(from, to);
+        return range.contains(target);
+    }
+
+    private int timeToNumber() {
+        LocalTime time = LocalTime.now(ZoneId.of("Asia/Seoul"));
+        String hours = String.format("%02d", time.getHour());
+        String min = String.format("%02d", time.getMinute());
+        return timeToNumber(hours + min);
+    }
+
+    private int timeToNumber(String timeText) {
+        return Integer.parseInt(timeText);
+    }
+
+    private boolean isWeekEnd(LocalDate today) {
+        return SUNDAY == today.getDayOfWeek() || SATURDAY == today.getDayOfWeek();
     }
 
     private ToIntFunction<Map<String, String>> getSort() {

@@ -15,6 +15,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 
+/**
+ * API 응답 문자열 변환 Util
+ * XML -> JSON
+ * String -> XML Document
+ */
 public final class ApiResConverter {
     private ApiResConverter() {}
 

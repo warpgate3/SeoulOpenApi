@@ -24,6 +24,10 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.springframework.util.StringUtils.isEmpty;
 
+/**
+ * 공공 API 서비스 요청 공통 클래스
+ * 공공 API 서비스를 추가할 경우 해당 클래스를 상속 받아야 된다.
+ */
 @Service
 public abstract class CommonApiService {
     @Value("${api.credential_key}")
