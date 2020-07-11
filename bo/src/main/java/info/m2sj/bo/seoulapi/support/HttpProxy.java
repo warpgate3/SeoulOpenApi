@@ -10,6 +10,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+/**
+ * HTTP 요청 연동 클래스
+ */
 @Service
 @Slf4j
 public class HttpProxy {
@@ -20,6 +23,12 @@ public class HttpProxy {
                 .build();
     }
 
+    /**
+     * 입력받은 URL을 Get 요청
+     *
+     * @param url 요청 URL
+     * @return 응답결과 문자열
+     */
     public String sendGet(String url) {
         log.info("request url :::> {}", url);
         HttpRequest request = HttpRequest.newBuilder()

@@ -10,7 +10,7 @@
     </parent>
     <groupId>info.m2sj</groupId>
     <artifactId>bo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>bo</name>
     <description>project-k backend</description>
 
@@ -114,6 +114,16 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.10</version>
+        </dependency>
+        <dependency>
+            <groupId>info.m2sj</groupId>
+            <artifactId>ui</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
 

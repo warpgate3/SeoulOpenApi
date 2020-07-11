@@ -1,9 +1,16 @@
 api:
-  credential_key: "4445474e677761723130374964455271"
+  credential_key: ENC(1lm2e/Qom8wwLTE/6WPdpUk96UxSPfUhcQOeKOMstQp49IomXTuV39S4vfjogPoX)
   api_server_url: "http://openapi.seoul.go.kr:8088/"
   service_name: "/GetParkInfo"
-  refresh_data_interval: 600000 #10 minute
+  refresh_data_interval: 1800000 #30 minute
 spring:
   cache:
     jcache:
       config: classpath:ehcache.xml
+  webflux:
+    static-path-pattern: /**
+  resources:
+    static-locations: "classpath:"
+jasypt:
+  encryptor:
+    password: projectk

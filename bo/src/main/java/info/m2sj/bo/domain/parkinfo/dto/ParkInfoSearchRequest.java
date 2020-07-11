@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchParam {
+public class ParkInfoSearchRequest {
     /** 동 or 구 검색어*/
     @ApiParam(value = "동 or 구 검색어",  example = "서초구")
     private String wardName;
