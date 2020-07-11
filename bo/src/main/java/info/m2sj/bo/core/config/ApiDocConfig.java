@@ -1,6 +1,5 @@
-package info.m2sj.bo.core;
+package info.m2sj.bo.core.config;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,6 +15,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
 import java.util.Optional;
 
+/**
+ * Swagger 설정 configuration 클래스
+ */
 @Configuration
 @EnableSwagger2WebFlux
 @Import(BeanValidatorPluginsConfiguration.class)

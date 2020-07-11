@@ -1,6 +1,5 @@
 /project-k.iml
 /.idea/
-/bo/target/
 /bo/src/test/java/info/m2sj/bo/Test.java
 /ui/package-lock.json
 /seoul
