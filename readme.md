@@ -3,6 +3,7 @@
 - 주소,전화번호,시설명 검색기능 제공 
 - 최저 요금 기준(30분 기본요금 간주)
 - 사용가능 여부 표시(현 시각 기준)
+<br />
 <kbd><img src='screenshot.png'></kbd><br />
 
 ## Getting Started
@@ -28,12 +29,12 @@ git clone https://github.com/warpgate3/project-k.git
 ./mvnw clean install
 ```
 
-## Deployment
+### Deployment
 ```
 java -jar ./bo/seoul-data-searcher.jar
 ```
 
-## Deployment (Docker)
+### Deployment (Docker)
 호스트에 [Dokcer](https://docs.docker.com/get-docker/) 가 설치돼 있어야 합니다. 
 
 Build 
