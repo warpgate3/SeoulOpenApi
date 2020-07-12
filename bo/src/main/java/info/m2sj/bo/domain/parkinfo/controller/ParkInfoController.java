@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(value = { "http://localhost:8081" })
+@CrossOrigin(value = { "*" })
 public class ParkInfoController {
     private final ParkInfoService parkInfoService;
 

@@ -3,6 +3,7 @@
 - 주소,전화번호,시설명 검색기능 제공 
 - 최저 요금 기준(30분 기본요금 간주)
 - 사용가능 여부 표시(현 시각 기준)
+<kbd><img src='screenshot.png'></kbd><br />
 
 ## Getting Started
 빌드를 하기 위해서 Maven과 Node,Npm 이 필요하나 애플리케이션 코드에 Built in 

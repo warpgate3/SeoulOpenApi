@@ -57,6 +57,9 @@
             searchWardName: String,
             searchParkingName: String,
             searchTelNumber: String,
+            searchByCoord: Boolean,
+            searchMyLat: Number,
+            searchMyLng: Number
         },
         methods: {
             fetchData() {
@@ -65,7 +68,10 @@
                     parkingName: this.searchParkingName,
                     telNumber: this.searchTelNumber,
                     pageNumber: this.pageNumber,
-                    pageScale: this.pageScale
+                    pageScale: this.pageScale,
+                    byCoord: this.searchByCoord,
+                    myLat: this.searchMyLat,
+                    myLng: this.searchMyLng
                 }).then(res => {
                     this.parkLots = res.parkInfoResponseList;
                     this.totalCount = res.totalCount;

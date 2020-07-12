@@ -37,4 +37,16 @@ public class ParkInfoSearchRequest {
     @ApiParam(value = "페이지당 보여질 주차장 정보 갯수", example = "20")
     @Min(value = 1, message = "pageNumber should not be less than 1")
     private int pageScale;
+
+    /** 사용자 위도 */
+    @ApiParam(value = "사용자의 위도정보", example = "35.999995")
+    private double myLat;
+
+    /** 사용자 경도 */
+    @ApiParam(value = "사용자의 경도정보 ", example = "124.1231255546")
+    private double myLng;
+
+    /** 위치정보 기준검색  */
+    @ApiParam(value = "위치정보 기준으로 검색", example = "true")
+    private boolean byCoord;
 }

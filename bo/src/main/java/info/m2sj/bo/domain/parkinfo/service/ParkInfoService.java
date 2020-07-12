@@ -15,10 +15,12 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.Math.sqrt;
 import static java.time.DayOfWeek.SATURDAY;
 import static java.time.DayOfWeek.SUNDAY;
 import static java.util.Objects.isNull;
@@ -70,7 +72,12 @@ public class ParkInfoService {
         }
 
         //정렬 처리
-        mapStream = mapStream.sorted(Comparator.comparingInt(getSort()));
+        if (parkInfoSearchRequest.isByCoord()) { //나의 위치 기준
+            mapStream = mapStream.sorted(Comparator.comparingDouble(
+                    getSortByCoord(parkInfoSearchRequest.getMyLat(), parkInfoSearchRequest.getMyLng())));
+        } else {
+            mapStream = mapStream.sorted(Comparator.comparingInt(getSortByRate()));
+        }
 
         //페이징처리
         List<Map<String, String>> collect = mapStream.collect(Collectors.toList());
@@ -88,28 +95,6 @@ public class ParkInfoService {
                 .totalCount(collect.size())
                 .parkInfoResponseList(parkInfoResponseList)
                 .build());
-    }
-
-    private Optional<ParkInfoResponse> mapToDtoAndAvailableParkYn(Map<String, String> parkingLot) {
-        if (isNull(parkingLot)) {
-            return Optional.empty();
-        }
-
-        ParkInfoResponse parkInfoResponse = ParkInfoResponse.builder()
-                .parkingCode(parkingLot.get("PARKING_CODE"))
-                .parkingName(parkingLot.get("PARKING_NAME"))
-                .operationRuleNm(parkingLot.get("OPERATION_RULE_NM"))
-                .payYn(parkingLot.get("PAY_YN"))
-                .parkingTypeNm(parkingLot.get("PARKING_TYPE_NM"))
-                .rates(parkingLot.get("RATES"))
-                .addr(parkingLot.get("ADDR"))
-                .tel(parkingLot.get("TEL"))
-                .timeRate(parkingLot.get("TIME_RATE"))
-                .build();
-        //주차장 이용 가능여부 확인
-        parkInfoResponse.setAvailableParkingYn(isAvailableParking(parkingLot) ? "Y" : "N");
-
-        return Optional.of(parkInfoResponse);
     }
 
     /**
@@ -192,7 +177,7 @@ public class ParkInfoService {
      *
      * @return ToIntFunction
      */
-    private ToIntFunction<Map<String, String>> getSort() {
+    private ToIntFunction<Map<String, String>> getSortByRate() {
         int defaultTime = 30;
         return (m) -> {
             String rates = m.get("RATES");
@@ -263,5 +248,51 @@ public class ParkInfoService {
      */
     private boolean isPay(Map<String, String> param) {
         return Objects.equals(param.get("PAY_YN"), "Y");
+    }
+
+    /**
+     * 좌표 기반 정렬
+     * @param myLat 나의 위치  위도
+     * @param myLng 나의 위치 경도
+     * @return 주차장과의 거리
+     */
+    private ToDoubleFunction<Map<String, String>> getSortByCoord(double myLat, double myLng) {
+        return (m) -> {
+            if (StringUtils.isEmpty(m.get("LAT")) || StringUtils.isEmpty(m.get("LNG"))) {
+                return Double.MAX_VALUE;
+            }
+            double lat = Double.parseDouble(m.get("LAT"));
+            double lng = Double.parseDouble(m.get("LNG"));
+            double distance = sqrt((lat - myLat) * (lat - myLat) + (lng - myLng) * (lng - myLng));
+            return distance;
+        };
+    }
+
+    /**
+     * Map형으로 담겨져있는 주차정 정보를 DTO 클래스로 변환
+     * 변환처리를 하면서 주차장 사용가능 여부 정보도 담는다.
+     * @param parkingLot 주차장 정보
+     * @return 주차장정보 DTO
+     */
+    private Optional<ParkInfoResponse> mapToDtoAndAvailableParkYn(Map<String, String> parkingLot) {
+        if (isNull(parkingLot)) {
+            return Optional.empty();
+        }
+
+        ParkInfoResponse parkInfoResponse = ParkInfoResponse.builder()
+                .parkingCode(parkingLot.get("PARKING_CODE"))
+                .parkingName(parkingLot.get("PARKING_NAME"))
+                .operationRuleNm(parkingLot.get("OPERATION_RULE_NM"))
+                .payYn(parkingLot.get("PAY_YN"))
+                .parkingTypeNm(parkingLot.get("PARKING_TYPE_NM"))
+                .rates(parkingLot.get("RATES"))
+                .addr(parkingLot.get("ADDR"))
+                .tel(parkingLot.get("TEL"))
+                .timeRate(parkingLot.get("TIME_RATE"))
+                .build();
+        //주차장 이용 가능여부 확인
+        parkInfoResponse.setAvailableParkingYn(isAvailableParking(parkingLot) ? "Y" : "N");
+
+        return Optional.of(parkInfoResponse);
     }
 }

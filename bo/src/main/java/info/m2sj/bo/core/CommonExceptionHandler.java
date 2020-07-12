@@ -25,6 +25,7 @@ public class CommonExceptionHandler {
        Map<String, String> error = new HashMap<>();
        error.put("code","E001");
        error.put("message",be.getMessage());
+       be.printStackTrace();
        return Mono.just(error);
     }
 
@@ -35,6 +36,7 @@ public class CommonExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("code","E002");
         error.put("message",ae.getMessage());
+        ae.printStackTrace();
         return Mono.just(error);
     }
 
@@ -45,6 +47,7 @@ public class CommonExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("code","E003");
         error.put("message",e.getMessage());
+        e.printStackTrace();
         return Mono.just(error);
     }
 }
