@@ -53,6 +53,9 @@
                 telNumber: "",
                 myLat: 0.0,
                 myLng: 0.0,
+                loading: "loading",
+                color: "red",
+                size: "5",
                 byCoord: false
             }
         },
@@ -61,7 +64,7 @@
         methods: {
             doSearch() {
                 console.log("do search!!");
-                this.$refs.list.fetchData();
+                this.$refs.list.fetchData('Y');
             },
             getMyCoordinates() {
                 if (this.byCoord) {
@@ -69,7 +72,7 @@
                         this.myLat = location.coords.latitude;
                         this.myLng = location.coords.longitude;
                         console.log(location.coords);
-                        this.doSearch();
+                        // this.doSearch();
                     }, err => {
                         alert(err.message);
                     })

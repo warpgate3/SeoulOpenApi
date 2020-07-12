@@ -13,6 +13,7 @@
     "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
     "vue-sliding-pagination": "^1.1.0",
+    "vue-spinner": "^1.0.4",
     "vuejs-paginate": "^2.1.0"
   },
   "devDependencies": {

@@ -1,5 +1,10 @@
 <template>
     <div class="offset">
+        <div v-if="loading" style="position: absolute; left: 50%; top:30%;">
+<!--            <div style="position: relative; left: -50%; border: dotted red 1px;">-->
+                <ring-loader :loading="loading"></ring-loader>
+<!--            </div>-->
+        </div>
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr style="text-align: center">
@@ -25,10 +30,13 @@
                 <td>{{parkLot.rates}}</td>
                 <td>{{parkLot.timeRate}}</td>
             </tr>
+            <tr v-if="parkLots.length === 0">
+                <td colspan="7" style="text-align: center">공영 주차장 정보 결과가 없습니다.</td>
+            </tr>
             </tbody>
         </table>
         <div class="text-center">
-            <paginate v-model="pageNumber" :page-count="pageCount" :page-range="pageScale" :margin-pages="1"
+            <paginate v-model="pageNumber" :page-count="pageCount" :page-range="pageScale" :margin-pages="3"
                       :click-handler="pageChangeHandler"
                       :prev-text="'Prev'" :next-text="'Next'" :container-class="'pagination'"
                       :page-class="'page-item'"></paginate>
@@ -46,7 +54,8 @@
                 pageNumber: 1,
                 pageScale: 10,
                 totalCount: 0,
-                pageCount: 0
+                pageCount: 0,
+                loading: false,
             }
         },
         components: {},
@@ -62,7 +71,11 @@
             searchMyLng: Number
         },
         methods: {
-            fetchData() {
+            fetchData(init) {
+                this.loading = true;
+                if (init === 'Y') {
+                    this.pageNumber = 1;
+                }
                 parkInfoService.fetch({
                     wardName: this.searchWardName,
                     parkingName: this.searchParkingName,
@@ -75,8 +88,13 @@
                 }).then(res => {
                     this.parkLots = res.parkInfoResponseList;
                     this.totalCount = res.totalCount;
-                    this.pageCount = res.totalCount / this.pageScale;
-                });
+                    this.pageCount = Math.floor(res.totalCount/this.pageScale);
+                    if (res.totalCount % this.pageScale > 0) {
+                        this.pageCount = this.pageCount + 1;
+                    }
+                }).finally(() => {
+                    this.loading = false;
+                })
             },
             pageChangeHandler(selectedPage) {
                 this.pageNumber = selectedPage;
