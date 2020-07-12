@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const DOMAIN = 'http://192.168.35.39:8080'; //dev TODO: deploy profiling
-//const DOMAIN = ''; //deploy
+// const DOMAIN = 'http://192.168.35.39:8080'; //dev TODO: deploy profiling
+const DOMAIN = ''; //deploy
 
 const request = (method, url, data) => {
     return axios({
