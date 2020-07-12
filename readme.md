@@ -32,7 +32,7 @@ git clone https://github.com/warpgate3/project-k.git
 
 ### Deployment
 ```
-java -jar ./bo/seoul-data-searcher.jar
+java -jar ./bo/target/seoul-data-searcher.jar
 ```
 
 ### Deployment (Docker)
