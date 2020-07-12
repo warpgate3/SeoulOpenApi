@@ -44,7 +44,7 @@ Build
 ```
 Run
 ```
-docker run -itd --name seoul-data-searcher info/m2sj/seoul-data-searcher 
+docker run -itd -p 8080:8080 --name seoul-data-searcher info/m2sj/seoul-data-searcher 
 ```
 
 ## Start
