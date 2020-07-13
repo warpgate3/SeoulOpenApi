@@ -23,7 +23,9 @@ public class CommonScheduler {
     @Scheduled(fixedDelayString = "${api.refresh_data_interval}")
     public void batch() {
         log.info("[ refresh cache data... ]");
+        //clear cache
         parkInfoDataLoader.evictAllCacheValues();
+        //cache reload
         parkInfoDataLoader.getParkInfoData();
     }
 

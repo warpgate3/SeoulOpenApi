@@ -11,10 +11,10 @@ import lombok.Setter;
 @Setter
 public class ApiParam {
     /** 시작 번호*/
-    protected long startIndex;
+    protected int startIndex;
 
     /** 페이지당 보여질 아이템수 */
-    protected long endIndex;
+    protected int endIndex;
 
     /** 응답 문서 type */
     protected ApiResultType apiResultType;

@@ -179,10 +179,10 @@ public class ParkInfoService {
      */
     private ToIntFunction<Map<String, String>> getSortByRate() {
         int defaultTime = 30;
-        return (m) -> {
-            String rates = m.get("RATES");
-            String timeRate = m.get("TIME_RATE");
-            if (isPay(m)) {
+        return (parkingLotMap) -> {
+            String rates = parkingLotMap.get("RATES");
+            String timeRate = parkingLotMap.get("TIME_RATE");
+            if (isPay(parkingLotMap)) {
                 if (isAllNumeric(rates, timeRate)) {
                     return Integer.parseInt(rates) * (defaultTime / Integer.parseInt(timeRate));
                 }
@@ -201,7 +201,7 @@ public class ParkInfoService {
      * @return Predicate
      */
     private Predicate<Map<String, String>> getSearchFilter(String jsonKey, String searchText) {
-        return (m) -> nonNull(m.get(jsonKey)) && m.get(jsonKey)
+        return (parkingLotMap) -> nonNull(parkingLotMap.get(jsonKey)) && parkingLotMap.get(jsonKey)
                 .contains(searchText);
     }
 
@@ -221,8 +221,8 @@ public class ParkInfoService {
         if (toIdx > totalSize) {
             toIdx = totalSize;
         }
-        log.info("total size:::>{}, pageNumber:::>{}, pageScale:::>{}", target.size(), pageNumber, pageScale);
-        log.info("from:{} -> to:{}", fromIdx, toIdx);
+        log.debug("total size:::>{}, pageNumber:::>{}, pageScale:::>{}", target.size(), pageNumber, pageScale);
+        log.debug("from:{} -> to:{}", fromIdx, toIdx);
         return List.of(fromIdx, toIdx);
     }
 

@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(value = { "*" })
+@CrossOrigin(value = {"*"})
 public class ParkInfoController {
     private final ParkInfoService parkInfoService;
 
@@ -31,10 +31,10 @@ public class ParkInfoController {
     @ApiOperation(value = "", notes = "서울시 공용 주차장 정보 조회")
     @GetMapping("/getParkInfo")
     public Mono<ParkInfoPagingResponse> getParkInfo(@Valid ParkInfoSearchRequest parkInfoSearchRequest,
-                                                                   BindingResult bindingResult) {
+                                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-           throw new BaseException(Objects.requireNonNull(
-                   bindingResult.getFieldError()).getDefaultMessage());
+            throw new BaseException(Objects.requireNonNull(
+                    bindingResult.getFieldError()).getDefaultMessage());
         }
 
         return parkInfoService.findParkInfoListBy(parkInfoSearchRequest);

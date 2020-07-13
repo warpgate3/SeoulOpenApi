@@ -73,7 +73,7 @@
         methods: {
             fetchData(init) {
                 this.loading = true;
-                if (init === 'Y') {
+                if (init === 'Y') { //재 검색일 경우 페이지 세트번호를 1로 초기화
                     this.pageNumber = 1;
                 }
                 parkInfoService.fetch({

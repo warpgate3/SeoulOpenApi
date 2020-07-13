@@ -21,34 +21,32 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = BaseException.class)
     @ResponseBody
     public Mono<Map<String, String>> baseException(BaseException be) {
-       log.error(be.getMessage());
-       Map<String, String> error = new HashMap<>();
-       error.put("code","E001");
-       error.put("message",be.getMessage());
-       be.printStackTrace();
-       return Mono.just(error);
+        log.error(be.getMessage());
+        be.printStackTrace();
+        return Mono.just(getErrorMap("E001", be.getMessage()));
     }
 
     @ExceptionHandler(value = ApiException.class)
     @ResponseBody
     public Mono<Map<String, String>> apiException(ApiException ae) {
         log.error(ae.getMessage());
-        Map<String, String> error = new HashMap<>();
-        error.put("code","E002");
-        error.put("message",ae.getMessage());
         ae.printStackTrace();
-        return Mono.just(error);
+        return Mono.just(getErrorMap("E002", ae.getMessage()));
     }
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Mono<Map<String, String>> commonException(Exception e) {
         log.error(e.getMessage());
-        Map<String, String> error = new HashMap<>();
-        error.put("code","E003");
-        error.put("message",e.getMessage());
         e.printStackTrace();
-        return Mono.just(error);
+        return Mono.just(getErrorMap("E003", e.getMessage()));
+    }
+
+    private Map<String, String> getErrorMap(String errCode, String errMsg) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("code", errCode);
+        errorMap.put("message", errMsg);
+        return errorMap;
     }
 }
 

@@ -49,41 +49,64 @@ public class ParkInfoDataLoader {
 
         int totalCount = Integer.parseInt(String.valueOf(apiData.get("list_total_count")));
         log.info("ParkInfo Data Total Rows => {}", totalCount);
-        JSONArray rows = apiData.getJSONArray("row");
+        JSONArray parkingLots = apiData.getJSONArray("row");
 
-        if (totalCount > OPEN_API_MAX_RESULT) {
-            //전체 건수를 1000건으로 나누어 조회 요청할 횟수 계산
-            int l = totalCount / OPEN_API_MAX_RESULT;
-
-            //1000건으로 나누고 나머지가 있을 경우 1회 더 요청
-            if (totalCount % OPEN_API_MAX_RESULT > 0) {
-                l = l + 1;
-            }
+        if (hasMore(totalCount)) {
+            //요청할 횟수
+            int retryNumber = getRetryCount(totalCount);
 
             //마지막 조회 아이템 + 1 이 시작건수
             int startIdx = OPEN_API_MAX_RESULT + 1;
-            for (int s = 1; s < l; s++) {
+            for (int reqNum = 1; reqNum < retryNumber; reqNum++) {
                 parkApiParam.setStartIndex(startIdx);
-                int e = startIdx + OPEN_API_MAX_RESULT - 1;
-                parkApiParam.setEndIndex(e);
-
+                parkApiParam.setEndIndex(getEndIdx(startIdx));
                 //공공 API 재 호출
                 JSONObject data = apiService.call(parkApiParam);
                 JSONArray addedRows;
                 try {
                     //조회 결과 Merge
                     addedRows = data.getJSONArray("row");
-                    rows.addAll(addedRows);
+                    parkingLots.addAll(addedRows);
                 } catch (JSONException jsonException) {
                     //OPEN API 장애일 경우 Skip 처리
                     log.error(jsonException.getMessage(), "skip data!!");
                 }
 
                 //직전 조회의 endIdx + 1 이 시작 index가 된다.
-                startIdx = e + 1;
+                startIdx = getNextStartIdx(parkApiParam.getEndIndex());
             }
         }
-        return rows;
+        return parkingLots;
+    }
+    private int getNextStartIdx(int endIdx) {
+       return endIdx + 1;
+    }
+    private int getEndIdx(int startIdx) {
+        return startIdx + OPEN_API_MAX_RESULT - 1;
+    }
+    /**
+     * MAX count 이상 데이터가 존재하는지 확인
+     * @param totalCount 전체 Count
+     * @return true: MAX 값 이상 데이터 존재
+     */
+    private boolean hasMore(int totalCount) {
+       return totalCount > OPEN_API_MAX_RESULT;
+    }
+
+    /**
+     * API 재요청할 횟수 반환
+     * @param totalCount 전체 주차장 정보건수
+     * @return 재요청 횟수
+     */
+    private int getRetryCount(int totalCount) {
+        //전체 건수를 1000건으로 나누어 조회 요청할 횟수 계산
+        int retryNumber = totalCount / OPEN_API_MAX_RESULT;
+
+        //1000건으로 나누고 나머지가 있을 경우 1회 더 요청
+        if (totalCount % OPEN_API_MAX_RESULT > 0) {
+            retryNumber = retryNumber + 1;
+        }
+        return retryNumber;
     }
 
     /**
