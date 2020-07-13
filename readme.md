@@ -32,7 +32,7 @@ git clone https://github.com/warpgate3/project-k.git
 
 ### Deployment
 ```
-java -jar ./bo/seoul-data-searcher.jar
+java -jar ./bo/target/seoul-data-searcher.jar
 ```
 
 ### Deployment (Docker)
@@ -44,7 +44,7 @@ Build
 ```
 Run
 ```
-docker run -itd --name seoul-data-searcher info/m2sj/seoul-data-searcher 
+docker run -itd -p 8080:8080 --name seoul-data-searcher info/m2sj/seoul-data-searcher 
 ```
 
 ## Start
