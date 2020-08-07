@@ -21,7 +21,7 @@ Git
 ### Installing
 
 ```
-git clone https://github.com/warpgate3/project-k.git
+git clone https://github.com/warpgate3/seoul-openapi.git
 ```
 
 ### Build
